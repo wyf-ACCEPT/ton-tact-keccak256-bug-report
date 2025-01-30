@@ -16,11 +16,11 @@ describe("SigVerifier", () => {
       { $$type: "Deploy", queryId: 0n },
     );
 
-    const compare = async (msg: string) => {
+    const compare = async (msg: string, showMessage: boolean = true) => {
       const hashEthers = ethers.keccak256(Buffer.from(msg))
       const hashTact = '0x' + (await contract.getKeccak256(msg)).toString(16)
-      console.log(`Keccak256 from ethers: [${Buffer.from(msg)}] -> [${hashEthers}]`)
-      console.log(`Keccak256 from tact  : [${Buffer.from(msg)}] -> [${hashTact}]`)
+      console.log(`Keccak256 from ethers: [${showMessage ? Buffer.from(msg) : "..."}] -> [${hashEthers}]`)
+      console.log(`Keccak256 from tact  : [${showMessage ? Buffer.from(msg) : "..."}] -> [${hashTact}]`)
       expect(hashEthers.toLowerCase()).toEqual(hashTact)
     }
 
@@ -33,6 +33,15 @@ describe("SigVerifier", () => {
 
     const msg3 = "12345".repeat(30)
     await expect(compare(msg3)).rejects.toThrow()
+
+    const msg4 = "\\\r\b\n\x19"
+    await compare(msg4, false)
+
+    const msg5 = "\\\r\b\n\x19".repeat(25)
+    await compare(msg5, false)
+
+    const msg6 = "\\\r\b\n\x19".repeat(26)
+    await expect(compare(msg6, false)).rejects.toThrow()
   });
 
 });
