@@ -1,0 +1,18 @@
+{
+    "projects": [{
+        "name": "keccak256-bug",
+        "path": "./sources/contract.tact",
+        "output": "./sources/output",
+        "mode": "full",
+        "options": {
+            "external": false,
+            "debug": false,
+            "ipfsAbiGetter": false,
+            "interfacesGetter": false,
+            "experimental": {
+                "inline": false
+            }
+        }
+    }]
+}
+
